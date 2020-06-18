@@ -41,7 +41,7 @@ const webpackConfigs = require("path/to/webpack.config.js");
 const app = express();
 
 const kevin = new Kevin(webpackConfigs, {
-    kevinPublicPath = "http://localhost:3000"
+    kevinPublicPath: "http://localhost:3000"
 });
 app.use(kevin.getMiddleware());
 
@@ -51,8 +51,10 @@ app.use(kevin.getMiddleware());
 app.use("/ac/webpack/js", express.static(webpackConfigs[0].output.path));
 
 // Let 'er rip
-app.listen(9275);
+app.listen(3000);
 ```
+
+For a complete example, check out [this repository][kevin-example].
 
 ---
 
@@ -226,3 +228,4 @@ at the time.
 [webpack]: https://webpack.js.org
 [express-middleware]: https://expressjs.com/en/guide/using-middleware.html
 [webpack-name]: https://webpack.js.org/configuration/other-options/#name
+[kevin-example]: https://github.com/joebeachjoebeach/kevin-example
