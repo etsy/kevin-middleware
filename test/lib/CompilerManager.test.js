@@ -3,6 +3,16 @@
 const CompilerManager = require("../../lib/CompilerManager");
 const { FIRST_BUILD, BUILDING, ERROR, DONE } = require("../../lib/constants");
 
+let consoleSpy;
+
+beforeAll(() => {
+    consoleSpy = jest.spyOn(global.console, "error").mockImplementation(() => {});
+});
+
+afterAll(() => {
+    consoleSpy.mockRestore();
+});
+
 const getMockCompiler = () => {
     const hook = { tap: () => {} };
     return {
