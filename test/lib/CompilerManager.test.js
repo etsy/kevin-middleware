@@ -3,14 +3,12 @@
 const CompilerManager = require("../../lib/CompilerManager");
 const { FIRST_BUILD, BUILDING, ERROR, DONE } = require("../../lib/constants");
 
-let consoleSpy;
-
 beforeAll(() => {
-    consoleSpy = jest.spyOn(global.console, "error").mockImplementation(() => {});
+    jest.spyOn(global.console, "error").mockImplementation(() => {});
 });
 
 afterAll(() => {
-    consoleSpy.mockRestore();
+    global.console.error.mockRestore();
 });
 
 const getMockCompiler = () => {
