@@ -19,7 +19,7 @@
   "author": "Salem Hilal (salem@etsy.com)",
   "license": "MIT",
   "devDependencies": {
-    "husky": "^4.2.5",
+    "husky": "^5.0.9",
     "jest": "^26.2.1",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
