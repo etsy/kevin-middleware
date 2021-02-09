@@ -21,6 +21,7 @@
   "devDependencies": {
     "husky": "^5.0.9",
     "jest": "^26.2.1",
+    "pinst": "^2.1.4",
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1"
   },
