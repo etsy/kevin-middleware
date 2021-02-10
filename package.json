@@ -10,7 +10,10 @@
   "scripts": {
     "lint": "eslint --cache .",
     "test": "jest",
-    "try": "npm run lint && npm run test"
+    "try": "npm run lint && npm run test",
+    "postinstall": "husky install",
+    "prepublishOnly": "pinst --disable",
+    "postpublish": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -19,16 +22,11 @@
   "author": "Salem Hilal (salem@etsy.com)",
   "license": "MIT",
   "devDependencies": {
-    "husky": "^4.2.5",
-    "jest": "^26.2.1",
-    "prettier": "^1.19.1",
-    "pretty-quick": "^2.0.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "[[ \"$(git symbolic-ref --short -q HEAD)\" != \"master\" ]] || npm run try",
-      "pre-commit": "pretty-quick --staged"
-    }
+    "husky": "^5.0.9",
+    "jest": "^26.6.3",
+    "pinst": "^2.1.4",
+    "prettier": "^2.2.1",
+    "pretty-quick": "^3.1.0"
   },
   "jest": {
     "automock": false,

@@ -1,0 +1,1 @@
+[[ \"$(git symbolic-ref --short -q HEAD)\" != \"master\" ]] || npm run try

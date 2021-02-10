@@ -1,0 +1,1 @@
+PATH=$(npm bin):$PATH pretty-quick --staged

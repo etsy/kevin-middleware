@@ -52,7 +52,7 @@ describe("countActiveCompilers", () => {
     it("should return the number of active compilers", () => {
         const manager = new CompilerManager();
         const watcher = {
-            close: callback => {
+            close: (callback) => {
                 callback();
             },
         };
@@ -63,12 +63,12 @@ describe("countActiveCompilers", () => {
         expect(manager.countActiveCompilers()).toEqual(2);
         return manager
             .closeCompiler("nick")
-            .then(name => {
+            .then((name) => {
                 expect(manager.isCompilerActive(name)).toEqual(false);
                 expect(manager.countActiveCompilers()).toEqual(1);
                 return manager.closeCompiler("elback");
             })
-            .then(name => {
+            .then((name) => {
                 expect(manager.isCompilerActive(name)).toEqual(false);
                 expect(manager.countActiveCompilers()).toEqual(0);
             });
