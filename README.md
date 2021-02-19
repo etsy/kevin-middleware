@@ -106,9 +106,9 @@ This is a prefix for Kevin's internal API. You probably don't need to change thi
 #### `getAssetName`
 
 -   Type: `Function`
--   Default: `path => path`
+-   Default: `(requestPath, req, res) => requestPath.replace(/^\//, "").replace(/\.js$/, "")`
 
-Given a request path, return the name of the asset we're trying to serve. Useful if you have entries that don't map to the filenames they render.
+Given a request path, req object, and res object, return the name of the asset we're trying to serve. Useful if you have entries that don't map to the filenames they render.
 
 #### `additionalOverlayInfo`
 
