@@ -88,3 +88,30 @@ describe("kevin's validateConfigs utility", () => {
         }).toThrowError(/your configs share a name/);
     });
 });
+describe("initializeEntryMap", () => {
+    const { initializeEntryMap } = require("../../lib/utils");
+
+    it("returns a list of names of all configs able to handle entrypoint", () => {
+        const configs = [
+            {
+                name: "someConfigEntry",
+                entry: {
+                    someEntryPoint: `./someEntryPoint`,
+                },
+            },
+            {
+                name: "someOtherConfigEntry",
+                entry: {
+                    someEntryPoint: `./someEntryPoint`,
+                },
+            },
+        ];
+
+        const entryMap = initializeEntryMap(configs);
+
+        expect(entryMap.someEntryPoint).toEqual([
+            "someConfigEntry",
+            "someOtherConfigEntry",
+        ]);
+    });
+});
