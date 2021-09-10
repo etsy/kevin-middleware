@@ -113,14 +113,23 @@ Given a request path, req object, and res object, return the name of the asset w
 #### `selectConfigName`
 
 -   Type: `Function`
--   Default: `(requestPath, configNames) => (reqPath, configNames) => { if (!configNames) { return null; } if (configNames.length > 1) { logError( `Multiple configNames found for ${reqPath}: ${configNames.join(
-    ","
-    )}. Using first one.`
-    );
-    }
+-   Default:
 
-                return configNames[0];
-            },`
+```js
+(requestPath, configNames) => {
+    if (!configNames) {
+        return null;
+    }
+    if (configNames.length > 1) {
+        logError(
+            `Multiple configNames found for ${reqPath}: ${configNames.join(
+                ","
+            )}. Using first one.`
+        );
+    }
+    return configNames[0];
+};
+```
 
 Given a request path and a list of configNames, return the name of the config to use.
 Useful if you know more about the request URI and if there are multiple configs that
