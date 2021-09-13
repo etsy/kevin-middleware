@@ -41,7 +41,7 @@ const webpackConfigs = require("path/to/webpack.config.js");
 const app = express();
 
 const kevin = new Kevin(webpackConfigs, {
-    kevinPublicPath: "http://localhost:3000"
+    kevinPublicPath: "http://localhost:3000",
 });
 app.use(kevin.getMiddleware());
 
@@ -110,6 +110,31 @@ This is a prefix for Kevin's internal API. You probably don't need to change thi
 
 Given a request path, req object, and res object, return the name of the asset we're trying to serve. Useful if you have entries that don't map to the filenames they render.
 
+#### `selectConfigName`
+
+-   Type: `Function`
+-   Default:
+
+```js
+(requestPath, configNames) => {
+    if (!configNames) {
+        return null;
+    }
+    if (configNames.length > 1) {
+        logError(
+            `Multiple configNames found for ${reqPath}: ${configNames.join(
+                ","
+            )}. Using first one.`
+        );
+    }
+    return configNames[0];
+};
+```
+
+Given a request path and a list of configNames, return the name of the config to use.
+Useful if you know more about the request URI and if there are multiple configs that
+claim to serve it.
+
 #### `additionalOverlayInfo`
 
 -   Type: `String`
@@ -123,7 +148,7 @@ To further extend Kevin's capabilities, we used Webpack's [Tapable][tapable] fra
 
 ```js
 // Tap into hooks first...
-kevin.hooks.compilerStart.tap("MySweetLoggingPlugin", compilerName => {
+kevin.hooks.compilerStart.tap("MySweetLoggingPlugin", (compilerName) => {
     CustomLogger.log(`The ${compilerName} compiler just started up`);
 });
 
