@@ -151,17 +151,58 @@ describe("getAllCompilerInfo", () => {
                     region: expect.objectContaining({
                         status: ERROR,
                     }),
-                    foo: expect.objectContaining({
+                    // Inactive compilers should not have any other info
+                    foo: {
                         status: NOT_BUILT,
-                    }),
-                    bar: expect.objectContaining({
+                    },
+                    bar: {
                         status: NOT_BUILT,
-                    }),
-                    lala: expect.objectContaining({
+                    },
+                    lala: {
                         status: NOT_BUILT,
-                    }),
+                    },
                 },
             })
         );
+    });
+
+    it("should return more information about the active compilers", () => {
+        const manager = new CompilerManager();
+        // Active compilers
+        manager.manageCompiler("iam", getMockCompiler(), {});
+        manager.manageCompiler("an", getMockCompiler(), {}, BUILDING);
+        manager.manageCompiler("active", getMockCompiler(), {}, DONE);
+        manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
+
+        const configNames = ["foo", "bar", "lala", "iam", "an", "active", "region"];
+        const moreInfo = {
+            errors: expect.any(Array),
+            frequency: expect.any(Number),
+            frecency: expect.any(Number),
+            frequencyChecks: expect.any(Array),
+            pinned: expect.any(Boolean),
+        };
+
+        expect(manager.getAllCompilerInfo(configNames)).toEqual({
+            compilers: expect.objectContaining({
+                iam: {
+                    status: FIRST_BUILD,
+                    ...moreInfo,
+                },
+                an: {
+                    status: BUILDING,
+                    ...moreInfo,
+                },
+                active: {
+                    status: DONE,
+                    ...moreInfo,
+                },
+                region: {
+                    status: ERROR,
+                    ...moreInfo,
+                },
+            }),
+            leastUsedCompiler: expect.any(String),
+        });
     });
 });
