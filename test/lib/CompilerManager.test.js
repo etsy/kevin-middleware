@@ -1,7 +1,13 @@
 "use strict";
 
 const CompilerManager = require("../../lib/CompilerManager");
-const { FIRST_BUILD, BUILDING, ERROR, DONE } = require("../../lib/constants");
+const {
+    FIRST_BUILD,
+    BUILDING,
+    ERROR,
+    DONE,
+    NOT_BUILT,
+} = require("../../lib/constants");
 
 beforeAll(() => {
     jest.spyOn(global.console, "error").mockImplementation(() => {});
@@ -94,7 +100,7 @@ describe("getStatus", () => {
 });
 
 describe("getAllBuildStatuses", () => {
-    it("should show the build states of all compilers", () => {
+    it("should show the build states of active compilers", () => {
         const manager = new CompilerManager();
         manager.manageCompiler("nick", getMockCompiler(), {});
         manager.manageCompiler("elback", getMockCompiler(), {}, BUILDING);
@@ -116,5 +122,46 @@ describe("getAllBuildStatuses", () => {
             isnt: DONE,
             good: DONE,
         });
+    });
+});
+
+describe("getAllCompilerInfo", () => {
+    it("should return an object with both active and inactive compilers", () => {
+        const manager = new CompilerManager();
+        // Active compilers
+        manager.manageCompiler("iam", getMockCompiler(), {});
+        manager.manageCompiler("an", getMockCompiler(), {}, BUILDING);
+        manager.manageCompiler("active", getMockCompiler(), {}, DONE);
+        manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
+
+        // All compilers
+        const configNames = ["foo", "bar", "lala", "iam", "an", "active", "region"];
+        expect(manager.getAllCompilerInfo(configNames)).toEqual(
+            expect.objectContaining({
+                compilers: {
+                    iam: expect.objectContaining({
+                        status: FIRST_BUILD,
+                    }),
+                    an: expect.objectContaining({
+                        status: BUILDING,
+                    }),
+                    active: expect.objectContaining({
+                        status: DONE,
+                    }),
+                    region: expect.objectContaining({
+                        status: ERROR,
+                    }),
+                    foo: expect.objectContaining({
+                        status: NOT_BUILT,
+                    }),
+                    bar: expect.objectContaining({
+                        status: NOT_BUILT,
+                    }),
+                    lala: expect.objectContaining({
+                        status: NOT_BUILT,
+                    }),
+                },
+            })
+        );
     });
 });
