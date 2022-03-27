@@ -1,13 +1,7 @@
 "use strict";
 
 const CompilerManager = require("../../lib/CompilerManager");
-const {
-    FIRST_BUILD,
-    BUILDING,
-    ERROR,
-    DONE,
-    NOT_BUILT,
-} = require("../../lib/constants");
+const { FIRST_BUILD, BUILDING, ERROR, DONE } = require("../../lib/constants");
 
 beforeAll(() => {
     jest.spyOn(global.console, "error").mockImplementation(() => {});
@@ -126,7 +120,7 @@ describe("getAllBuildStatuses", () => {
 });
 
 describe("getAllCompilerInfo", () => {
-    it("should return an object with both active and inactive compilers", () => {
+    it("should return an object with active compilers", () => {
         const manager = new CompilerManager();
         // Active compilers
         manager.manageCompiler("iam", getMockCompiler(), {});
@@ -134,9 +128,7 @@ describe("getAllCompilerInfo", () => {
         manager.manageCompiler("active", getMockCompiler(), {}, DONE);
         manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
 
-        // All compilers
-        const configNames = ["foo", "bar", "lala", "iam", "an", "active", "region"];
-        expect(manager.getAllCompilerInfo(configNames)).toEqual(
+        expect(manager.getAllCompilerInfo()).toEqual(
             expect.objectContaining({
                 compilers: {
                     iam: expect.objectContaining({
@@ -151,16 +143,6 @@ describe("getAllCompilerInfo", () => {
                     region: expect.objectContaining({
                         status: ERROR,
                     }),
-                    // Inactive compilers should not have any other info
-                    foo: {
-                        status: NOT_BUILT,
-                    },
-                    bar: {
-                        status: NOT_BUILT,
-                    },
-                    lala: {
-                        status: NOT_BUILT,
-                    },
                 },
             })
         );
@@ -168,13 +150,12 @@ describe("getAllCompilerInfo", () => {
 
     it("should return more information about the active compilers", () => {
         const manager = new CompilerManager();
-        // Active compilers
+
         manager.manageCompiler("iam", getMockCompiler(), {});
         manager.manageCompiler("an", getMockCompiler(), {}, BUILDING);
         manager.manageCompiler("active", getMockCompiler(), {}, DONE);
         manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
 
-        const configNames = ["foo", "bar", "lala", "iam", "an", "active", "region"];
         const moreInfo = {
             errors: expect.any(Array),
             frequency: expect.any(Number),
@@ -183,7 +164,7 @@ describe("getAllCompilerInfo", () => {
             pinned: expect.any(Boolean),
         };
 
-        expect(manager.getAllCompilerInfo(configNames)).toEqual({
+        expect(manager.getAllCompilerInfo()).toEqual({
             compilers: expect.objectContaining({
                 iam: {
                     status: FIRST_BUILD,
