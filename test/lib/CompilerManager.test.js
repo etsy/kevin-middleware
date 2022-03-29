@@ -94,7 +94,7 @@ describe("getStatus", () => {
 });
 
 describe("getAllBuildStatuses", () => {
-    it("should show the build states of all compilers", () => {
+    it("should show the build states of active compilers", () => {
         const manager = new CompilerManager();
         manager.manageCompiler("nick", getMockCompiler(), {});
         manager.manageCompiler("elback", getMockCompiler(), {}, BUILDING);
@@ -115,6 +115,75 @@ describe("getAllBuildStatuses", () => {
             elback: DONE,
             isnt: DONE,
             good: DONE,
+        });
+    });
+});
+
+describe("getAllCompilerInfo", () => {
+    it("should return an object with active compilers", () => {
+        const manager = new CompilerManager();
+        // Active compilers
+        manager.manageCompiler("iam", getMockCompiler(), {});
+        manager.manageCompiler("an", getMockCompiler(), {}, BUILDING);
+        manager.manageCompiler("active", getMockCompiler(), {}, DONE);
+        manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
+
+        expect(manager.getAllCompilerInfo()).toEqual(
+            expect.objectContaining({
+                compilers: {
+                    iam: expect.objectContaining({
+                        status: FIRST_BUILD,
+                    }),
+                    an: expect.objectContaining({
+                        status: BUILDING,
+                    }),
+                    active: expect.objectContaining({
+                        status: DONE,
+                    }),
+                    region: expect.objectContaining({
+                        status: ERROR,
+                    }),
+                },
+            })
+        );
+    });
+
+    it("should return more information about the active compilers", () => {
+        const manager = new CompilerManager();
+
+        manager.manageCompiler("iam", getMockCompiler(), {});
+        manager.manageCompiler("an", getMockCompiler(), {}, BUILDING);
+        manager.manageCompiler("active", getMockCompiler(), {}, DONE);
+        manager.manageCompiler("region", getMockCompiler(), {}, ERROR);
+
+        const moreInfo = {
+            errors: expect.any(Array),
+            frequency: expect.any(Number),
+            frecency: expect.any(Number),
+            frequencyChecks: expect.any(Array),
+            pinned: expect.any(Boolean),
+        };
+
+        expect(manager.getAllCompilerInfo()).toEqual({
+            compilers: expect.objectContaining({
+                iam: {
+                    status: FIRST_BUILD,
+                    ...moreInfo,
+                },
+                an: {
+                    status: BUILDING,
+                    ...moreInfo,
+                },
+                active: {
+                    status: DONE,
+                    ...moreInfo,
+                },
+                region: {
+                    status: ERROR,
+                    ...moreInfo,
+                },
+            }),
+            leastUsedCompiler: expect.any(String),
         });
     });
 });
