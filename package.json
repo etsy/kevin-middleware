@@ -1,6 +1,6 @@
 {
   "name": "kevin-middleware",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "This is an Express middleware that makes developing javascript in a monorepo easier.",
   "main": "index.js",
   "directories": {
