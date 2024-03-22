@@ -153,7 +153,7 @@ The overlay will fire 3 performance markers:
 -   performance.mark("kevin-overlay-end") - assets are finished building, and right before the page refreshes
 -   performance.measure("kevin-overlay") - right after the above, indicating total time overlay was visible to user.
 
-If you would like to add a prefix to these marker names, you may pass it in as an option, otherwise the marker names will be as below.
+If you would like to add a prefix to these marker names, you may pass it in as an option, otherwise the marker names will be as below. Please see documentation on performance markers here: https://developer.mozilla.org/en-US/docs/Web/API/Performance.
 
 ## Hooks
 
