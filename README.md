@@ -142,6 +142,19 @@ claim to serve it.
 
 This is a string that's inserted into the overlay, in order to provide users with additional information. It's useful if you'd like to provide feedback to users of your server, like "If you run into issues, try running restart_server_please.sh". This string may contain valid HTML.
 
+#### `perfMarkerPrefix`
+
+-   Type: `String`
+-   Default: `""`
+
+The overlay will fire 3 performance markers:
+
+-   performance.mark("kevin-overlay-start") - when the overlay first renders
+-   performance.mark("kevin-overlay-end") - assets are finished building, and right before the page refreshes
+-   performance.measure("kevin-overlay") - right after the above, indicating total time overlay was visible to user.
+
+If you would like to add a prefix to these marker names, you may pass it in as an option, otherwise the marker names will be as below.
+
 ## Hooks
 
 To further extend Kevin's capabilities, we used Webpack's [Tapable][tapable] framework to provide access to some of Kevin's core functionality. You can use a hook much like you would with Webpack:
